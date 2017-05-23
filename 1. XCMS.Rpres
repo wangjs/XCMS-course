@@ -15,23 +15,38 @@ bib <- read.bibtex("bibliography.bib")
 ```
 
 
-Outline (1)
+Outline
 ========================================================
+type: sub-section
 
-**XCMS**
-- What does the data look like? Why pre-processing?
-- Peak picking (xcmsSet)
-- Grouping and retention time correction (group & retcor)
-- Filling missing values (fillPeaks)
-- Checking the results
-
-
-
+<div style="font-size: 1.3em; text-align: center;line-height: 150%; padding-top:100px">
+<br>
+<br>
+<ol type="1">
+<li><a href="#/why">What does the data look like?<br>Why pre-processing?</a></li>
+<li><a href="#/peakpick">Peak picking</a></li>
+<li><a href="#/group">Grouping</a> peaks</li>
+<li><a href="#/retcor">Retention time correction</a></li>
+<li><a href="#/fillPeaks">Filling</a> missing values</li>
+<li>Checking the results</li>
+</ol>
+</div>
 
 
 
 What does the data look like? Why pre-processing?
 ========================================================
+id: why
+type: sub-section
+
+<br>
+<p style="font-size: 1.5em;">Why are we here and why do we need to do this?</p>
+
+
+
+What does the data look like? Why pre-processing?
+========================================================
+
 - 3D to 2D
 
 <br>
@@ -42,6 +57,15 @@ This is what XCMS does:
 
 <br>
 Simply to do. Difficult to do well. Impossible to do perfectly.
+
+
+Peak picking
+========================================================
+type: sub-section
+id: peakpick
+
+<br>
+<p style="font-size: 1.5em;">Is this a peak or just noise?</p>
 
 
 Peak picking
@@ -94,7 +118,7 @@ Below we are setting it to use one just because it works better for generating t
 To control the number of cores you could for example do:
 ```{r, eval = FALSE}
 suppressMessages(library(parallel))
-BPPARAM  = SnowParam(detectCores()-2, progressbar = TRUE)
+BPPARAM  = SnowParam(detectCores()-1, progressbar = TRUE)
 ```
 
 <br>
@@ -106,8 +130,8 @@ xset <- xcmsSet(files,
                 BPPARAM  = SerialParam(),
                 method = 'centWave',
                 prefilter = c(3,1E3),
-                ppm = 20,
-                snthr = 5e3,
+                ppm = 30,
+                snthr = 1E2,
                 profparam = list(step=0.005),
                 peakwidth = c(0.05*60,0.20*60)
                 )
@@ -174,6 +198,7 @@ Says to only consider regions where there are at least `3` scans with intensity 
 
 Check your peak widths to see how many scans per peak you are sure to have.
 
+For the intensity set to approximately the intensity of the random noise you see in a spectrum.
 
 
 Peak picking - Peak width
@@ -252,7 +277,7 @@ We need a range that is true also for the ends of the peaks.
 <br>
 What we choose before was:
 ```{r, eval=FALSE}
-ppm = 20
+ppm = 30
 ```
 
 <br>
@@ -333,12 +358,13 @@ profparam = list(step=0.005)
 Peak picking - snthr
 ========================================================
 
-Signal to noise ratio. It really depends on your data. And it is defined differently for centWave and matchedfilter.
+Signal to noise ratio. It really depends on your data. And it is defined differently for centWave and matchedfilter.<br>
+It appears to be very unstable even for very similar peaks. So I suggest to set it low and filter on intensity afterwards if needed.
 
 For centWave I would start with:
 
 ```{r, eval=FALSE}
-snthr = 5e3
+snthr = 1E2
 ```
 
 For matchedfilter I would start with:
@@ -351,6 +377,14 @@ snthr = 5
 If low peaks that you would like to include are missing lower the value.
 
 
+
+Grouping and retention time correction
+========================================================
+id: group
+type: sub-section
+
+<br>
+<p style="font-size: 1.5em;">Is this peak the same as that peak?</p>
 
 
 Grouping and retention time correction
@@ -390,12 +424,21 @@ xset_g
 ```
 
 
+Grouping and retention time correction - group
+========================================================
+
+Example of grouping density.
+
+<br>
+<div align="center">
+<img src="_images/group_dens.png" height=800px>
+</div>
+
 
 Grouping and retention time correction - group bw
 ========================================================
 incremental: true
 
-*TODO: density plot?*
 
 **bw**: bandwidth (standard deviation or half width at half maximum) of gaussian smoothing kernel to apply to the peak density chromatogram. <br>
 
@@ -477,15 +520,60 @@ Example:
 
 
 
-Grouping and retention time correction - minfrac/minsamp
+Grouping and retention time correction - retcor
+========================================================
+id: retcor
+
+
+```{r, echo= -1, cache=TRUE, fig.width = 20, fig.height = 8, fig.align = "center", dpi=300}
+par(cex.axis=1.5, cex.lab=1.5, lwd=3)
+
+xset_g_r <- retcor(xset_g, 
+                   missing = 3, 
+                   extra = 3, 
+                   smooth = "loess", 
+                   span = 0.6, 
+                   family = "gaussian", 
+                   plottype = "mdevden",
+                   col=xset_g@phenoData[,"class"]
+                  )
+
+```
+
+
+
+Grouping and retention time correction - grouping one more time
 ========================================================
 
-- LOESS fitting is default
+Now we do grouping again with the corrected retention times.
+
+```{r, cache=TRUE, message = FALSE}
+xset_g_r_g <- group(xset_g_r, 
+                    bw = 5, 
+                    minfrac = 0.75, 
+                    minsamp = 7, 
+                    mzwid = 0.05, 
+                    max = 20, 
+                    sleep = 0
+                   )
+
+xset_g_r_g
+```
+
+
+
+
+Grouping and retention time correction - grouping one more time
+========================================================
+
+
 - More  features are not always good
 - minsamp/minfrac is per group and critical. phenoData
-- bw
+
 - retcor
   - span
+
+
 - Debugging
   - Peak picking or alignment?
   - bw or mzwid adjustment needed?
