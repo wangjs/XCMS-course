@@ -1,3 +1,11 @@
+<style>
+.centerpage {
+margin: auto !important;
+width: 1200px;
+}
+</style>
+
+
 XCMS course 2017
 ========================================================
 author: 
@@ -47,6 +55,8 @@ type: sub-section
 What does the data look like? Why pre-processing?
 ========================================================
 
+TODO: These slides...
+
 - 3D to 2D
 
 <br>
@@ -68,19 +78,12 @@ id: peakpick
 <p style="font-size: 1.5em;">Is this a peak or just noise?</p>
 
 
-Peak picking
-========================================================
-
-- Three algoritms
-- Finding reasonable peak width
-- profparam
-- prefilter
-- Difference LC/GC (max for matchedfilter)
-- Checking the results
-- Exclude blanks
 
 Find the files
 ========================================================
+
+<br>
+
 First we locate the files.
 They need to be in an open format: 
 * mzML (newest)
@@ -97,11 +100,15 @@ head(files,5)
 ```
 
 <br>
-Blanks interfer with peak alignment since there are so few peaks. So better remove them before starting. Same goes for compound mixtures.
+Blanks interfer with peak alignment since there are so few peaks. <br>
+So better remove them before starting. Same goes for compound mixtures.
 
 
 Peak picking
 ========================================================
+incremental: true
+
+<br><br>
 
 Now we can do peak picking. We need to load some packages first.
 
@@ -112,19 +119,10 @@ suppressMessages(library(BiocParallel))
 ```
 
 <br>
-By dafault the newest XCMS uses all available cores.<br>
-Below we are setting it to use one just because it works better for generating this presentation.
-
-To control the number of cores you could for example do:
-```{r, eval = FALSE}
-suppressMessages(library(parallel))
-BPPARAM  = SnowParam(detectCores()-1, progressbar = TRUE)
-```
-
-<br>
 Now lets do the peak picking.<br>
 There are many parameters to set that we will explain in a sec.<br>
 There are a few more settings available but these are the most important.
+
 ```{r, cache=TRUE, message = FALSE}
 xset <- xcmsSet(files, 
                 BPPARAM  = SerialParam(),
@@ -139,14 +137,42 @@ xset <- xcmsSet(files,
 
 
 
+Peak  - BPPARAM
+========================================================
+
+<br>
+By default the newest XCMS uses all available cores.<br>
+Before we set it to use a single core (SerialParam) just because it works better for generating this presentation.
+
+To control the number of cores you could for example do:
+```{r, eval = FALSE}
+library(parallel)
+```
+
+and set:
+
+```{r, eval = FALSE}
+BPPARAM  = SnowParam(detectCores()-1, progressbar = TRUE)
+```
+
+<br><br>
+
+* `SnowParam()` on windows
+* `MulticoreParam()` on linux
+
+
 Peak picking - which method?
 ========================================================
+class: centerpage
+
+<br>
 
 **matchedfilter** `r citep(bib[["Smith2006"]])`
 * Original algoritm
-* Developed for nominal mass instruments
-* Good for low accuracy data
-* Good for chromatographically noisy data (also high accuracy MS)
+* Developed for nominal mass instruments. 
+   * Therefore good for low accuracy data
+   * Also works for accurate mass data
+* Good for chromatographically noisy data
 * Fixed width peak fitting
 
 <br>
@@ -162,8 +188,10 @@ Peak picking - which method?
 TODO: add something here.
 
 
-Peak picking - What peak picking does `r citep(bib[["Tautenhahn2008"]])`
+Peak picking - What peak picking does
 ========================================================
+
+Here we will go through peakpicking with the centwave algorithm `r citep(bib[["Tautenhahn2008"]])`.<br>
 
 * First it finds *regions of interest* (ROIs). <br> Those are where there could be a peak: Stable mass for a certain time.
 * Next the peak shape is evaluated.
@@ -176,7 +204,7 @@ Peak picking - What peak picking does `r citep(bib[["Tautenhahn2008"]])`
 
 
 
-Peak picking - What peak picking does `r citep(bib[["Tautenhahn2008"]])`
+Peak picking - What peak picking does
 ========================================================
 
 <div align="center">
@@ -188,17 +216,19 @@ Peak picking - What peak picking does `r citep(bib[["Tautenhahn2008"]])`
 
 Peak picking - Prefilter
 ========================================================
+class: centerpage
 
 <br>
+
 ```{r, eval=FALSE}
 prefilter = c(3,1E3)
 ```
-<br>
-Says to only consider regions where there are at least `3` scans with intensity above `1000`.
 
-Check your peak widths to see how many scans per peak you are sure to have.
+<br><br>
 
-For the intensity set to approximately the intensity of the random noise you see in a spectrum.
+* Says to only consider regions where there are at least `3` scans with intensity above `1000`.
+* Check your peak widths to see how many scans per peak you are sure to have.
+* For the intensity set to approximately the intensity of the random noise you see in a spectrum.
 
 
 Peak picking - Peak width
@@ -268,7 +298,7 @@ Peak picking - ppm
 ========================================================
 
 <br>
-ppm == Relative deviation in the m/z dimension
+ppm == Relative deviation in the *m/z* dimension
 
 <br>
 Do not trust the vendors number. Like the mileage of a car these numbers are far from true in real world scenarios.<br>
@@ -298,6 +328,8 @@ Peak picking - ppm
 
 Peak picking - ppm
 ========================================================
+
+Check the peak bounderies with an EIC.
 <br>
 <div align="center">
 <img src="_images/trp_frag_chrom.png" height=1300px>
@@ -307,6 +339,7 @@ Peak picking - ppm
 Peak picking - ppm
 ========================================================
 
+Check what are actually reasonably sized peaks in the spectrum.
 <br>
 <div align="center">
 <img src="_images/trp_frag_spec.png" height=1300px>
@@ -315,6 +348,8 @@ Peak picking - ppm
 
 Peak picking - ppm
 ========================================================
+
+TODO: Is ppm calculated from the mean to the edges? So +/-. Or does all scans need to be within the ppm to be included?
 
 <br>
 <div align="center">
@@ -338,12 +373,12 @@ First we need to clear up the confusion about the difference between *profile mo
 As opposed to centroid mode data where you have discrete (sticks) in the *m/z* dimension.
 
 **Profile matrix:** A rt (or scan rather) × *m/z* matrix of *m/z* slices.<br>
-XCMS uses this for some procedures instead of the full raw data. Think of it as binned data with less *m/z* resolution.
+XCMS uses this for some procedures (fillPeaks, but not peakpicking) instead of the full raw data. Think of it as binned data with less *m/z* resolution.
 
 <br>
 * The profparam parameter says how fine the binning in the *Profile matrix* is going to be.
-* For high dimensional data the default setting can cause problems. So setting something like this will set it to 0.005 Da slices.
 * It cannot be set too low as slices will be combined as needed. Only memory usage will increase.
+* For high dimensional data the default setting can cause problems. So setting something like this will set it to 0.005 Da slices.
 
 <br>
 
@@ -374,7 +409,7 @@ snthr = 5
 ```
                
 <br>
-If low peaks that you would like to include are missing lower the value.
+If low peaks that you would like to include are missing then lower the value.
 
 
 
@@ -390,9 +425,12 @@ type: sub-section
 Grouping and retention time correction
 ========================================================
 
+<br>
+
 This step tries to group/match features between samples.<br>
 **This is probably the most important step!**
 
+<br>
 It is a 3 step procedure:
 
 1. Features are grouped according to RT. Loose parameters for matching is used.
@@ -415,7 +453,7 @@ xset_g <- group(xset,
                 bw = 0.2*60, 
                 minfrac = 0.5, 
                 minsamp = 5, 
-                mzwid = 0.05, 
+                mzwid = 0.01, 
                 max = 20, 
                 sleep = 0
                 )
@@ -429,9 +467,8 @@ Grouping and retention time correction - group
 
 Example of grouping density.
 
-<br>
 <div align="center">
-<img src="_images/group_dens.png" height=800px>
+<img src="_images/group_dens.png" height=1300px>
 </div>
 
 
@@ -439,6 +476,7 @@ Grouping and retention time correction - group bw
 ========================================================
 incremental: true
 
+<br>
 
 **bw**: bandwidth (standard deviation or half width at half maximum) of gaussian smoothing kernel to apply to the peak density chromatogram. <br>
 
@@ -457,6 +495,7 @@ Overlay the BPI and find the peak with the highest deviation.
 Grouping and retention time correction - group bw
 ========================================================
 
+<br>
 Here we have zoomed. Compare peak apexes.
 
 <br>
@@ -488,7 +527,7 @@ minsamp = 5
 **minfrac:** minimum fraction of samples a peak should be found in.
 
 <br>
-**These are used** ***per group***.
+**These are used** ***per sample group***.
 
 Files in different subfolders are considered different groups.<br>
 The groups can be manipulated by changing:
@@ -520,6 +559,40 @@ Example:
 
 
 
+Grouping and retention time correction - mzwid
+========================================================
+
+<br>
+
+```{r, eval=FALSE}
+mzwid = 0.01
+```
+ 
+<br>
+         
+How close the m/z need to be the same compound.
+
+  
+
+ 
+Grouping and retention time correction - max
+========================================================
+
+<br>
+
+**max:** maximum number of groups to identify in a single *m/z* slice.<br>
+Meaning how many isomers do you have across a chromatogram.
+ 
+<br>
+
+```{r, eval=FALSE}
+max = 20
+```
+
+<br>
+If you are processing GC data remember that many fragments will be isomers. So set this high.
+               
+                
 Grouping and retention time correction - retcor
 ========================================================
 id: retcor
@@ -545,14 +618,16 @@ xset_g_r <- retcor(xset_g,
 Grouping and retention time correction - grouping one more time
 ========================================================
 
-Now we do grouping again with the corrected retention times.
+Now we do grouping again with the corrected retention times.<br>
+
+Notice that we give more strict `bw`, `minfrac` and `minsamp` since we expect better matching now that we have corrected the retention times.
 
 ```{r, cache=TRUE, message = FALSE}
 xset_g_r_g <- group(xset_g_r, 
                     bw = 5, 
                     minfrac = 0.75, 
                     minsamp = 7, 
-                    mzwid = 0.05, 
+                    mzwid = 0.01, 
                     max = 20, 
                     sleep = 0
                    )
@@ -562,8 +637,7 @@ xset_g_r_g
 
 
 
-
-Grouping and retention time correction - grouping one more time
+Grouping and retention time correction - Some more thoughts
 ========================================================
 
 
@@ -585,6 +659,11 @@ Filling missing values (fillPeaks)
 ========================================================
 - Importance of profparam previously set
 - Problem of very accurate data
+
+
+
+What is the output of XCMS really?
+========================================================
 
 
 
