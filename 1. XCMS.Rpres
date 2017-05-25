@@ -734,41 +734,62 @@ xset_g_r_g
 
 
 
-Grouping and retention time correction - Some more thoughts
-========================================================
-
-
-- More features are not always good
-- minsamp/minfrac is per group and critical. phenoData
-
-- retcor
-  - span
-
-
-- Debugging
-  - Peak picking or alignment?
-  - bw or mzwid adjustment needed?
-  
-- Obiwarp as alternative
-
-
 Filling missing values (fillPeaks)
 ========================================================
-- Importance of profparam previously set
-- Problem of very accurate data
+
+* Importance of profparam previously set
+* Problem of very accurate data
+  * ppm in new version. minimum mz width
+* TODO: show density plot of mzmax-mzmin
+
+
+```{r, cache=TRUE, message = FALSE}
+xet_gr_g_fill <- fillPeaks(xset_g_r_g, 
+                           expand.mz=1.5,
+                           expand.rt=1.1, 
+                           BPPARAM = SerialParam()
+                          )
+```
 
 
 
 What is the output of XCMS really?
 ========================================================
 
+<br>
+
+```{r, cache=TRUE, message = FALSE}
+peaks <- peakTable(xet_gr_g_fill)
+```
+
+<br>
+
+```{r}
+kable(peaks[1:5,])
+```
+
+<br>
+
+TODO: What the columns mean
+TODO: npeaks means...
+
+
+What is the output of XCMS really? - fillPeaks revisited
+========================================================
+
+```{r, fig.height=15}
+hist(((peaks$mzmax-peaks$mzmin)/peaks$mz)*1E6, 100, xlab = "ppm")
+```
+
 
 
 Checking the results
 ========================================================
-- Are isomers separated?
-- Do you find peaks you know should be there?
-
+* Are isomers separated?
+* Do you find peaks you know should be there?
+* is peak picking or grouping the problem?
+* bw or mzwid adjustment needed?
+* More features are not always good. Could mean you are splitting features that are really the same
 
 
 Bibliography
@@ -777,4 +798,16 @@ Bibliography
 ```{r, echo=FALSE, results="asis"}
 bibliography()
 ```
+
+
+
+Versions used for the this presentation
+========================================================
+<font style="font-size: 0.9em;"> 
+
+```{r}
+sessionInfo()
+```
+
+</font> 
 
