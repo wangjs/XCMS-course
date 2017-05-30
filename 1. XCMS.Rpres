@@ -195,11 +195,12 @@ class: centerpage
 
 **matchedfilter** `r citep(bib[["Smith2006"]])`
 * Original algoritm
-* Developed for nominal mass instruments. 
+* Developed for nominal mass instruments
    * Therefore good for low accuracy data
    * Also works for accurate mass data
 * Good for chromatographically noisy data
 * Fixed width peak fitting
+* Bins data in *m/z* dimension
 
 <br>
 **centWave**  `r citep(bib[["Tautenhahn2008"]])`
@@ -207,11 +208,16 @@ class: centerpage
 * Handles different peak widths better
 * prefilter makes it faster
 * Usually the best if the data is "nice"
+* Bin-less approach
 
 <br>
 **massifquant**  `r citep(bib[["Conley2014"]])`
+* Developed (among other reasons) to better handle variable mass accuracy and peak shape
+* Bin-less approach
+* No personal experience but from the paper it appears that:
+   * Good at finding low intensity and low "quality" peaks
+   * More prone to false positives (picking noise) than centWave
 
-TODO: add something here.
 
 
 Peak picking - What peak picking does
