@@ -106,7 +106,7 @@ XCMS
 * R package
 * First published in 2006`r citep(bib[["Smith2006"]])` by Colin A. Smith *et al.* at The Scripps Research Institute (Patti Lab).
 * Open source: https://github.com/sneumann/xcms
-* The 'X' in the XCMS denotes that it can be used for an chromatography (**G**C/**L**C)
+* The 'X' in the XCMS denotes that it can be used for an chromatography (***G***C/***L***C)
 * Maintained for many years primarily by Steffen Nuemann and his group
 * New major version being developed by Johannes Rainer (EURAC Research , Bolzano, Italy)
 
