@@ -33,10 +33,21 @@ bib <- read.bibtex("bibliography.bib")
 ```
 
 
-<div style="font-size: 1.3em; color: white; text-align: center;padding-top: 10em;">
-<p style="font-size: 1.5em;">Jan Stanstrup</p>
-2017/06/25<br><br>
-Steno Diabetes Center Copenhagen, Denmark
+<div style="color: white; text-align: center;padding-top: 8em;">
+  <p style="font-size: 2em;margin-bottom: 0.5em;">
+    Jan Stanstrup
+  </p>
+  <p style="margin-top: 0.5em;font-size: 1.3em;">
+    <img src="_images/Twitter_bird_logo_2012.svg" width="50" height="50" style="vertical-align: bottom;margin: 0;background-color:transparent; border:0px; box-shadow:none;">
+    @JanStanstrup
+    <br>
+    stanstrup@gmail.com
+  </p>
+  <p style="font-size: 1.3em;margin-top: 2em;">
+    2017/06/25
+    <br><br>
+    Steno Diabetes Center Copenhagen, Denmark
+  </p>
 </div>
 
 
@@ -786,6 +797,31 @@ xset_g_r_g <- group(xset_g_r,
 
 xset_g_r_g
 ```
+
+
+
+                
+Grouping and retention time correction
+========================================================
+
+We can redo the `retcor` to get the plot using corrected RTs. We won't use the returned object.
+
+
+```{r, echo= -1, cache=TRUE, fig.width = 20, fig.height = 8, fig.align = "center", dpi=300}
+par(cex.axis=1.5, cex.lab=1.5, lwd=3)
+
+xset_g_r_g_r <- retcor(xset_g_r_g,
+                       method="peakgroups",
+                       missing = 3, 
+                       extra = 3, 
+                       smooth = "loess",
+                       span = 0.6, 
+                       plottype = "mdevden",
+                       col=xset_g@phenoData[,"class"]
+                      )
+
+```
+
 
 
 Filling missing values

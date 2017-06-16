@@ -1,6 +1,6 @@
 PackratFormat: 1.4
 PackratVersion: 0.4.8.1
-RVersion: 3.3.3
+RVersion: 3.3.2
 Repos: BioCsoft=https://bioconductor.org/packages/3.4/bioc,
     BioCann=https://bioconductor.org/packages/3.4/data/annotation,
     BioCexp=https://bioconductor.org/packages/3.4/data/experiment,
@@ -43,15 +43,15 @@ Hash: 2bd9ab43ade73a7d4974eadc4fb6527d
 
 Package: MSnbase
 Source: github
-Version: 2.3.3
-Hash: a04b50a744d056bf51ec195634b2b0e1
+Version: 2.3.6
+Hash: 97eb97fe33b933ccd6130607a4dde5a6
 Requires: Biobase, BiocGenerics, BiocParallel, IRanges, MALDIquant,
     ProtGenerics, Rcpp, S4Vectors, XML, affy, digest, ggplot2, impute,
     mzID, mzR, pcaMethods, plyr, preprocessCore, vsn
 GithubRepo: MSnbase
 GithubUsername: lgatto
 GithubRef: master
-GithubSha1: 1f5004721652c70b7db6527d11b1c0cec4504524
+GithubSha1: 4bab5883d490d10e0220ddfe36855703f0908e48
 
 Package: MassSpecWavelet
 Source: Bioconductor
@@ -92,8 +92,8 @@ Hash: fb672e20eb6f3010a3639f855d8ef6de
 
 Package: Rcpp
 Source: CRAN
-Version: 0.12.10
-Hash: 6cf65d0dd6a92f2d43c8d4805d33efe9
+Version: 0.12.11
+Hash: 2ee22f3b5e75dec80b1d8eca61cd96d8
 
 Package: RefManageR
 Source: CRAN
@@ -374,7 +374,7 @@ Requires: Biobase, BiocGenerics, Rcpp
 Package: plyr
 Source: CRAN
 Version: 1.8.4
-Hash: c9ddbdcfd74ff964e3e7d0b692a8dd70
+Hash: ec0683cf0ab5494db2eff1f31591624e
 Requires: Rcpp
 
 Package: preprocessCore
@@ -385,6 +385,7 @@ Hash: b99a8388fda594cc8c0c0cd3d98e0af5
 Package: reshape2
 Source: CRAN
 Version: 1.4.2
+Hash: 01fa9a6b3ead377e4fac84af9f982df9
 Requires: Rcpp, plyr, stringr
 
 Package: rlang
@@ -434,9 +435,9 @@ Requires: magrittr, stringi
 
 Package: tibble
 Source: CRAN
-Version: 1.3.1
-Hash: 07704884dc23a81adf01659b2ceeb8db
-Requires: Rcpp, assertthat, rlang
+Version: 1.3.3
+Hash: cff4362530fb71e27b84a02054bcb315
+Requires: Rcpp, rlang
 
 Package: vsn
 Source: Bioconductor
@@ -461,15 +462,15 @@ Hash: 774eb7be9087cdc24b53b74e5359cfac
 
 Package: xcms
 Source: github
-Version: 1.53.1
-Hash: d0b14d55059bc7df9bef727c43d35c6a
+Version: 2.99.3
+Hash: c92199c68f182188b72094e1e49b96a2
 Requires: Biobase, BiocGenerics, BiocParallel, MSnbase,
     MassSpecWavelet, ProtGenerics, RANN, RColorBrewer, S4Vectors,
     multtest, mzR, plyr
 GithubRepo: xcms
 GithubUsername: sneumann
 GithubRef: devel
-GithubSha1: d2d4b7a2a18a9a1620eaa52e94dc81edb2c939e9
+GithubSha1: 7ef70598754cffc9e896ddb3358f62471e0d16cb
 
 Package: yaml
 Source: CRAN
