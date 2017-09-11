@@ -1,6 +1,6 @@
 
 
-This Presentation was built for the [*EMN Workshop: MS Metabolomics Data Processing*](http://metabolomics2017.org/program/workshops) given at the 2017 conference of the Metabolomics Society.
+This Presentation was built for the [*EMN Workshop: MS Metabolomics Data Processing*](http://metabolomics2017.org/program/workshops) given at the 2017 conference of the Metabolomics Society. A video of the workshop (5) can be found on the [Metabolomics Society website](http://metabolomicssociety.org/site-map/articles/88-videos/262-2017-conference-workshop-videos-public).
 
 You can watch the slides of the presentation at: https://rawgit.com/stanstrup/XCMS-course/master/1.%20XCMS.html
 
