@@ -690,7 +690,8 @@ The higher the less flexible the fitting is.<br>
 0 == overfitting<br>
 1 == only captures very overall trends<br>
 <br>
-0.4-0.7 is typical in my opinion. 0.2 is default.
+0.2 is default. 0.4-0.7 is typical in my opinion.
+You might needed to encrease the span if for example you have regions with few peaks. The fit then tends to overfit heavily.
 <br>
 <br>
 
