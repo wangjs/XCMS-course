@@ -119,7 +119,7 @@ XCMS
 <br>
 
 * R package
-* First published in 2006`r citep(bib[["Smith2006"]])` by Colin A. Smith *et al.* at The Scripps Research Institute (Patti Lab).
+* First published in 2006`r citep(bib[["Smith2006"]])` by Colin A. Smith *et al.* at The Scripps Research Institute (Siuzdak Lab).
 * Open source: https://github.com/sneumann/xcms
 * The 'X' in the XCMS denotes that it can be used for an chromatography (***G***C/***L***C)
 * Maintained for many years primarily by Steffen Neumann and his group
@@ -445,7 +445,7 @@ XCMS uses this for some procedures (fillPeaks, but not peakpicking) instead of t
 <br>
 * The profparam parameter says how fine the binning in the *Profile matrix* is going to be.
 * It cannot be set too low as slices will be combined as needed. Only memory usage will increase.
-* For high dimensional data the default setting can cause problems. So setting something like this will set it to 0.01 Da slices.
+* For high resolution/accuracy MS the default setting can cause problems. So setting something like this will set it to 0.01 Da slices.
 
 <br>
 
@@ -956,8 +956,8 @@ kable(peaks_aligned[1:5,])
 
 * **npeaks:** Number of peaks assigned to the group.
 <br>&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;Can be higher than the number of samples if several original peaks (from peak-picking) were combined.
-<br>&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;If this is a lot *higher* than the number of samples something is probably wrong.
-<br>&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;If this is a lot *lower* than the number of samples something is probably wrong.
+<br>&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;If this is *a lot higher* than the number of samples something is probably wrong.
+<br>&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;If this is *a lot lower* than the number of samples something is probably wrong.
 * **A, B, C... (As the groups, or the folders you used, were named):** Number of samples where the feature was found (in original peak-picking).
 <br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Each file only counted one time.
 * **Other columns:** The intensities/areas in each file.
@@ -969,7 +969,7 @@ Checking the results and troubleshooting - Raw detected peaks
 
 <br>
 
-The other kind of table if the raw peaks as they were detected in each peak.<br>
+The other kind of table is the raw peaks as they were detected in each peak.<br>
 That includes all peaks that didn't survive the grouping step.
 
 
@@ -1000,7 +1000,7 @@ Checking the results and troubleshooting - Isomeric separation
 ========================================================
 
 Check if the individually found peaks (dots) are separated in groups (rectangles) properly.<br>
-The big red dot just marks the spot to asked about.
+The big red dot just marks the spot you asked about.
 <br>
 
 ```{r, fig.height=12, fig.width=16}
@@ -1033,7 +1033,7 @@ Checking the results and troubleshooting - Isomeric separation
 | Peaks not separated in RT dimension                          | Lower bw in the grouping step                               |
 | Peaks split in RT dimension                                  | Increase bw in the grouping step and/or better alignment    |
 | Peaks not separated in m/z dimension&nbsp;&nbsp;&nbsp;&nbsp; | Lower mzwid in the grouping step                            |
-| Peaks split in m/z dimension                                 | Increase mzwid in the grouping step and/or better alignment |
+| Peaks split in m/z dimension                                 | Increase mzwid in the grouping step                         |
 | Peaks missing                                                | Check raw peaklist and revise peak-picking                  |
 | Peak found but not assigned to group                         | Compare raw peaklist to minfrac & minsamp parameters for group |
 
